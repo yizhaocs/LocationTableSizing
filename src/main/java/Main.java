@@ -76,24 +76,24 @@ public class Main {
             //STEP 5: Extract data from result set
             while (result.next()) {
                 //Retrieve by column name
-                Integer id = result.getInt("id");
+                int id = result.getInt("id");
                 String country = result.getString("country");
                 String state = result.getString("state");
                 String city = result.getString("city");
                 String zipcode = result.getString("zipcode");
-                Double latitude = result.getDouble("latitude");
-                Double longitude = result.getDouble("longitude");
-                Integer metrocode = result.getInt("metrocode");
-                Integer areacode = result.getInt("areacode");
-                Integer gmt_offset = result.getInt("gmt_offset");
-                Integer cbsa_code = result.getInt("cbsa_code");
-                Integer csa_code = result.getInt("csa_code");
-                Integer md_code = result.getInt("md_code");
+                double latitude = result.getDouble("latitude");
+                double longitude = result.getDouble("longitude");
+                int metrocode = result.getInt("metrocode");
+                int areacode = result.getInt("areacode");
+                int gmt_offset = result.getInt("gmt_offset");
+                int cbsa_code = result.getInt("cbsa_code");
+                int csa_code = result.getInt("csa_code");
+                int md_code = result.getInt("md_code");
                 String md_title = result.getString("md_title");
-                Integer income = result.getInt("income");
-                Integer political_affiliation = result.getInt("political_affiliation");
+                int income = result.getInt("income");
+                int political_affiliation = result.getInt("political_affiliation");
                 String ethnicity = result.getString("ethnicity");
-                Double rent_owned = result.getDouble("rent_owned");
+                double rent_owned = result.getDouble("rent_owned");
                 String education = result.getString("education");
                 Date modification_ts = result.getDate("modification_ts");
 

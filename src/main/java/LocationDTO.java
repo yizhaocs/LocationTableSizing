@@ -4,40 +4,40 @@ import java.sql.Date;
  * Created by yzhao on 7/11/16.
  */
 public class LocationDTO {
-    private Integer id;
+    private int id;
     private String country;
     private String state;
     private String city;
     private String zipcode;
-    private Double latitude;
-    private Double longitude;
-    private Integer metrocode;
-    private Integer areacode;
-    private Integer gmt_offset;
-    private Integer cbsa_code;
-    private Integer csa_code;
-    private Integer md_code;
+    private double latitude;
+    private double longitude;
+    private int metrocode;
+    private int areacode;
+    private int gmt_offset;
+    private int cbsa_code;
+    private int csa_code;
+    private int md_code;
     private String md_title;
-    private Integer income;
-    private Integer political_affiliation;
+    private int income;
+    private int political_affiliation;
     private String ethnicity;
-    private Double rent_owned;
+    private double rent_owned;
     private String education;
     private Date modification_ts;
 
-    public Integer getAreacode() {
+    public int getAreacode() {
         return areacode;
     }
 
-    public void setAreacode(Integer areacode) {
+    public void setAreacode(int areacode) {
         this.areacode = areacode;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -73,59 +73,59 @@ public class LocationDTO {
         this.zipcode = zipcode;
     }
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public Integer getMetrocode() {
+    public int getMetrocode() {
         return metrocode;
     }
 
-    public void setMetrocode(Integer metrocode) {
+    public void setMetrocode(int metrocode) {
         this.metrocode = metrocode;
     }
 
-    public Integer getGmt_offset() {
+    public int getGmt_offset() {
         return gmt_offset;
     }
 
-    public void setGmt_offset(Integer gmt_offset) {
+    public void setGmt_offset(int gmt_offset) {
         this.gmt_offset = gmt_offset;
     }
 
-    public Integer getCbsa_code() {
+    public int getCbsa_code() {
         return cbsa_code;
     }
 
-    public void setCbsa_code(Integer cbsa_code) {
+    public void setCbsa_code(int cbsa_code) {
         this.cbsa_code = cbsa_code;
     }
 
-    public Integer getCsa_code() {
+    public int getCsa_code() {
         return csa_code;
     }
 
-    public void setCsa_code(Integer csa_code) {
+    public void setCsa_code(int csa_code) {
         this.csa_code = csa_code;
     }
 
-    public Integer getMd_code() {
+    public int getMd_code() {
         return md_code;
     }
 
-    public void setMd_code(Integer md_code) {
+    public void setMd_code(int md_code) {
         this.md_code = md_code;
     }
 
@@ -137,19 +137,19 @@ public class LocationDTO {
         this.md_title = md_title;
     }
 
-    public Integer getIncome() {
+    public int getIncome() {
         return income;
     }
 
-    public void setIncome(Integer income) {
+    public void setIncome(int income) {
         this.income = income;
     }
 
-    public Integer getPolitical_affiliation() {
+    public int getPolitical_affiliation() {
         return political_affiliation;
     }
 
-    public void setPolitical_affiliation(Integer political_affiliation) {
+    public void setPolitical_affiliation(int political_affiliation) {
         this.political_affiliation = political_affiliation;
     }
 
@@ -161,11 +161,11 @@ public class LocationDTO {
         this.ethnicity = ethnicity;
     }
 
-    public Double getRent_owned() {
+    public double getRent_owned() {
         return rent_owned;
     }
 
-    public void setRent_owned(Double rent_owned) {
+    public void setRent_owned(double rent_owned) {
         this.rent_owned = rent_owned;
     }
 
