@@ -1,6 +1,6 @@
+import gnu.trove.map.hash.THashMap;
+
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by yzhao on 7/11/16.
@@ -65,7 +65,7 @@ public class Main {
             return;
         }
 
-        Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
+        THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
 
         Statement statement = null;
         try {
