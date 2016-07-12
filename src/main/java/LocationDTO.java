@@ -1,9 +1,10 @@
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by yzhao on 7/11/16.
  */
 public class LocationDTO {
+    /*
     private int id;
     private byte[] country;
     private byte[] state;
@@ -24,8 +25,8 @@ public class LocationDTO {
     private double rent_owned;
     private byte[] education;
     private Date modification_ts;
+*/
 
-    /*
     private int id;
     private String country;
     private String state;
@@ -45,8 +46,9 @@ public class LocationDTO {
     private String ethnicity;
     private double rent_owned;
     private String education;
-    private Date modification_ts;*/
+    private Date modification_ts;
 
+/*
     public byte[] getState() {
         return state;
     }
@@ -206,8 +208,9 @@ public class LocationDTO {
     public void setModification_ts(Date modification_ts) {
         this.modification_ts = modification_ts;
     }
+*/
 
-    /*
+
     public int getAreacode() {
         return areacode;
     }
@@ -366,5 +369,5 @@ public class LocationDTO {
 
     public void setModification_ts(Date modification_ts) {
         this.modification_ts = modification_ts;
-    }*/
+    }
 }

@@ -1,7 +1,8 @@
-import gnu.trove.map.hash.TIntObjectHashMap;
-
-import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.SoftReference;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by yzhao on 7/11/16.
@@ -66,10 +67,12 @@ public class Main {
 
         // THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
         // THashMap<Integer, WeakReference<LocationDTO>> locationCache = new THashMap<Integer, WeakReference<LocationDTO>>();
-        TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
+       // TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
+      //  TIntObjectHashMap<WeakReference<LocationDTO>> locationCache = new TIntObjectHashMap<WeakReference<LocationDTO>>();
         //  TIntObjectHashMap<SoftReference<LocationDTO>> locationCache = new TIntObjectHashMap<SoftReference<LocationDTO>>();
         //Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
-        //Map<Integer, WeakReference<LocationDTO>> locationCache = new HashMap<Integer, WeakReference<LocationDTO>>();
+//        Map<Integer, WeakReference<LocationDTO>> locationCache = new HashMap<Integer, WeakReference<LocationDTO>>();
+        Map<Integer, SoftReference<LocationDTO>> locationCache = new HashMap<Integer, SoftReference<LocationDTO>>();
         //Map<Integer, LocationDTO> locationCache = new WeakHashMap<Integer, LocationDTO>();
         // Map<Integer, WeakReference<LocationDTO>> locationCache = new WeakHashMap<Integer, WeakReference<LocationDTO>>();
 
@@ -104,9 +107,12 @@ public class Main {
                 Date modification_ts = result.getDate("modification_ts");
 
 
-                LocationDTO mLocationDTO = new LocationDTO();
+
+               /*
+               LocationDTO mLocationDTO = new LocationDTO();
                 mLocationDTO.setId(id);
-                if (country != null)
+
+               if (country != null)
                     mLocationDTO.setCountry(country.getBytes(Charset.forName("UTF-8")));
 
                 if (state != null)
@@ -133,38 +139,38 @@ public class Main {
                 if (education != null)
                     mLocationDTO.setEducation(education.getBytes(Charset.forName("UTF-8")));
                 mLocationDTO.setModification_ts(modification_ts);
+*/
+
+                LocationDTO mLocationDTO = new LocationDTO();
+                mLocationDTO.setId(id);
+                mLocationDTO.setCountry(country);
+                mLocationDTO.setState(state);
+                mLocationDTO.setCity(city);
+                mLocationDTO.setZipcode(zipcode);
+                mLocationDTO.setLatitude(latitude);
+                mLocationDTO.setLongitude(longitude);
+                mLocationDTO.setMetrocode(metrocode);
+                mLocationDTO.setAreacode(areacode);
+                mLocationDTO.setGmt_offset(gmt_offset);
+                mLocationDTO.setCbsa_code(cbsa_code);
+                mLocationDTO.setCsa_code(csa_code);
+                mLocationDTO.setMd_code(md_code);
+                mLocationDTO.setMd_title(md_title);
+                mLocationDTO.setIncome(income);
+                mLocationDTO.setPolitical_affiliation(political_affiliation);
+                mLocationDTO.setEthnicity(ethnicity);
+                mLocationDTO.setRent_owned(rent_owned);
+                mLocationDTO.setEducation(education);
+                mLocationDTO.setModification_ts(modification_ts);
 
 //
-//                LocationDTO mLocationDTO = new LocationDTO();
-//                mLocationDTO.setId(id);
-//                mLocationDTO.setCountry(country);
-//                mLocationDTO.setState(state);
-//                mLocationDTO.setCity(city);
-//                mLocationDTO.setZipcode(zipcode);
-//                mLocationDTO.setLatitude(latitude);
-//                mLocationDTO.setLongitude(longitude);
-//                mLocationDTO.setMetrocode(metrocode);
-//                mLocationDTO.setAreacode(areacode);
-//                mLocationDTO.setGmt_offset(gmt_offset);
-//                mLocationDTO.setCbsa_code(cbsa_code);
-//                mLocationDTO.setCsa_code(csa_code);
-//                mLocationDTO.setMd_code(md_code);
-//                mLocationDTO.setMd_title(md_title);
-//                mLocationDTO.setIncome(income);
-//                mLocationDTO.setPolitical_affiliation(political_affiliation);
-//                mLocationDTO.setEthnicity(ethnicity);
-//                mLocationDTO.setRent_owned(rent_owned);
-//                mLocationDTO.setEducation(education);
-//                mLocationDTO.setModification_ts(modification_ts);
-
-
 //                WeakReference mWeakReference = new WeakReference(mLocationDTO);
 //                locationCache.put(id, mWeakReference);
 
-//                SoftReference mSoftReference = new SoftReference(mLocationDTO);
-//                locationCache.put(id, mSoftReference);
+   //             SoftReference mSoftReference = new SoftReference(mLocationDTO);
+  //              locationCache.put(id, mSoftReference);
 
-                locationCache.put(id, mLocationDTO);
+             // locationCache.put(id, mLocationDTO);
 
             }
 
@@ -194,14 +200,71 @@ public class Main {
             } catch (SQLException se) {
                 se.printStackTrace();
             }
+
+            int count = 0;
+
+//            for (TIntObjectIterator it = locationCache.iterator(); it.hasNext(); ) {
+//                it.advance();
+//                if(it.value() == null){
+//                    count++;
+//                }
+//            }
+
+            for(SoftReference w:locationCache.values()){
+                if(w.get() == null){
+                    count++;
+                }
+            }
+
+//            for(WeakReference w:locationCache.values()){
+//                if(w.get() == null){
+//                    count++;
+//                }
+//            }
+
+            System.out.println("count before gc:" + count);
+            count = 0;
+
+
             System.gc();
+
+//            for (TIntObjectIterator it = locationCache.iterator(); it.hasNext(); ) {
+//                it.advance();
+//                if(it.value() == null){
+//                    count++;
+//                }
+//            }
+
+//            for(WeakReference w:locationCache.values()){
+//                if(w.get() == null){
+//                    count++;
+//                }
+//            }
+
+            for(SoftReference w:locationCache.values()){
+                if(w.get() == null){
+                    count++;
+                }
+            }
+            System.out.println("count after gc:" + count);
             System.out.println("Used Memory:"
                     + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
             System.out.println(locationCache.size());
-            // System.out.println(locationCache.get(40527).get().getMd_code());
-            System.out.println(locationCache.get(40527).getCity());
+//            WeakReference<LocationDTO> result = locationCache.get(40527);
+//             System.out.println(result.get());
+            //System.out.println(locationCache.get(40527).getCity());
             //System.out.println(SizeOf.deepSizeOf());
 
         }
+    }
+
+    public static String byteArrayToString(byte[] byteArray) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            sb.append(new String(byteArray, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 }
