@@ -159,7 +159,7 @@ public class Main {
             } catch (SQLException se) {
                 se.printStackTrace();
             }
-         //   System.gc();
+            System.gc();
             System.out.println("Used Memory:"
                     + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
             System.out.println(locationCache.size());
