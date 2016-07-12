@@ -1,5 +1,6 @@
-import gnu.trove.map.hash.THashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
+import java.lang.ref.WeakReference;
 import java.sql.*;
 
 /**
@@ -14,13 +15,13 @@ public class Main {
     //  Database credentials
     static final String USER = "om";
     static final String PASS = "N3wQA3ra.";
+    static final int mb = 1024 * 1024;
 
     public static void main(String[] args) {
 
-        int mb = 1024*1024;
 
-        //Getting the runtime reference from system
-        Runtime runtime = Runtime.getRuntime();
+
+
 
 
         Connection connection = null;
@@ -30,8 +31,6 @@ public class Main {
             getLocation(connection);
 
             //Print used memory
-            System.out.println("Used Memory:"
-                    + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
 
 //            //Print free memory
 //            System.out.println("Free Memory:"
@@ -41,7 +40,7 @@ public class Main {
 //            System.out.println("Total Memory:" + runtime.totalMemory() / mb);
 
             //Print Maximum available memory
-            System.out.println("Max Memory:" + runtime.maxMemory() / mb + "mb");
+//            System.out.println("Max Memory:" + runtime.maxMemory() / mb + "mb");
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -65,9 +64,16 @@ public class Main {
             return;
         }
 
-        THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
-        //      Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
+        //Getting the runtime reference from system
+        Runtime runtime = Runtime.getRuntime();
 
+
+        // THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
+        // THashMap<Integer, WeakReference<LocationDTO>> locationCache = new THashMap<Integer, WeakReference<LocationDTO>>();
+        // TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
+         TIntObjectHashMap<WeakReference<LocationDTO>> locationCache = new TIntObjectHashMap<WeakReference<LocationDTO>>();
+        //Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
+        //Map<Integer, WeakReference<LocationDTO>> locationCache = new HashMap<Integer, WeakReference<LocationDTO>>();
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -120,9 +126,13 @@ public class Main {
                 mLocationDTO.setEducation(education);
                 mLocationDTO.setModification_ts(modification_ts);
 
-                locationCache.put(id, mLocationDTO);
+
+                WeakReference nWeakReference = new WeakReference(mLocationDTO);
+                locationCache.put(id, nWeakReference);
+
             }
-            //STEP 6: Clean-up environment
+
+
             result.close();
             statement.close();
             connection.close();
@@ -133,6 +143,9 @@ public class Main {
             //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
+
+
+
             //finally block used to close resources
             try {
                 if (statement != null)
@@ -146,6 +159,12 @@ public class Main {
             } catch (SQLException se) {
                 se.printStackTrace();
             }
+         //   System.gc();
+            System.out.println("Used Memory:"
+                    + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+            System.out.println(locationCache.size());
+            //System.out.println(SizeOf.deepSizeOf());
+
         }
     }
 }
