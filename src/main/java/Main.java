@@ -1,6 +1,6 @@
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-import java.lang.ref.WeakReference;
+import java.nio.charset.Charset;
 import java.sql.*;
 
 /**
@@ -18,10 +18,6 @@ public class Main {
     static final int mb = 1024 * 1024;
 
     public static void main(String[] args) {
-
-
-
-
 
 
         Connection connection = null;
@@ -70,10 +66,13 @@ public class Main {
 
         // THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
         // THashMap<Integer, WeakReference<LocationDTO>> locationCache = new THashMap<Integer, WeakReference<LocationDTO>>();
-        // TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
-         TIntObjectHashMap<WeakReference<LocationDTO>> locationCache = new TIntObjectHashMap<WeakReference<LocationDTO>>();
+        TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
+        //  TIntObjectHashMap<SoftReference<LocationDTO>> locationCache = new TIntObjectHashMap<SoftReference<LocationDTO>>();
         //Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
         //Map<Integer, WeakReference<LocationDTO>> locationCache = new HashMap<Integer, WeakReference<LocationDTO>>();
+        //Map<Integer, LocationDTO> locationCache = new WeakHashMap<Integer, LocationDTO>();
+        // Map<Integer, WeakReference<LocationDTO>> locationCache = new WeakHashMap<Integer, WeakReference<LocationDTO>>();
+
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -104,12 +103,18 @@ public class Main {
                 String education = result.getString("education");
                 Date modification_ts = result.getDate("modification_ts");
 
+
                 LocationDTO mLocationDTO = new LocationDTO();
                 mLocationDTO.setId(id);
-                mLocationDTO.setCountry(country);
-                mLocationDTO.setState(state);
-                mLocationDTO.setCity(city);
-                mLocationDTO.setZipcode(zipcode);
+                if (country != null)
+                    mLocationDTO.setCountry(country.getBytes(Charset.forName("UTF-8")));
+
+                if (state != null)
+                    mLocationDTO.setState(state.getBytes(Charset.forName("UTF-8")));
+                if (city != null)
+                    mLocationDTO.setCity(city.getBytes(Charset.forName("UTF-8")));
+                if (zipcode != null)
+                    mLocationDTO.setZipcode(zipcode.getBytes(Charset.forName("UTF-8")));
                 mLocationDTO.setLatitude(latitude);
                 mLocationDTO.setLongitude(longitude);
                 mLocationDTO.setMetrocode(metrocode);
@@ -118,17 +123,48 @@ public class Main {
                 mLocationDTO.setCbsa_code(cbsa_code);
                 mLocationDTO.setCsa_code(csa_code);
                 mLocationDTO.setMd_code(md_code);
-                mLocationDTO.setMd_title(md_title);
+                if (md_title != null)
+                    mLocationDTO.setMd_title(md_title.getBytes(Charset.forName("UTF-8")));
                 mLocationDTO.setIncome(income);
                 mLocationDTO.setPolitical_affiliation(political_affiliation);
-                mLocationDTO.setEthnicity(ethnicity);
+                if (ethnicity != null)
+                    mLocationDTO.setEthnicity(ethnicity.getBytes(Charset.forName("UTF-8")));
                 mLocationDTO.setRent_owned(rent_owned);
-                mLocationDTO.setEducation(education);
+                if (education != null)
+                    mLocationDTO.setEducation(education.getBytes(Charset.forName("UTF-8")));
                 mLocationDTO.setModification_ts(modification_ts);
 
+//
+//                LocationDTO mLocationDTO = new LocationDTO();
+//                mLocationDTO.setId(id);
+//                mLocationDTO.setCountry(country);
+//                mLocationDTO.setState(state);
+//                mLocationDTO.setCity(city);
+//                mLocationDTO.setZipcode(zipcode);
+//                mLocationDTO.setLatitude(latitude);
+//                mLocationDTO.setLongitude(longitude);
+//                mLocationDTO.setMetrocode(metrocode);
+//                mLocationDTO.setAreacode(areacode);
+//                mLocationDTO.setGmt_offset(gmt_offset);
+//                mLocationDTO.setCbsa_code(cbsa_code);
+//                mLocationDTO.setCsa_code(csa_code);
+//                mLocationDTO.setMd_code(md_code);
+//                mLocationDTO.setMd_title(md_title);
+//                mLocationDTO.setIncome(income);
+//                mLocationDTO.setPolitical_affiliation(political_affiliation);
+//                mLocationDTO.setEthnicity(ethnicity);
+//                mLocationDTO.setRent_owned(rent_owned);
+//                mLocationDTO.setEducation(education);
+//                mLocationDTO.setModification_ts(modification_ts);
 
-                WeakReference nWeakReference = new WeakReference(mLocationDTO);
-                locationCache.put(id, nWeakReference);
+
+//                WeakReference mWeakReference = new WeakReference(mLocationDTO);
+//                locationCache.put(id, mWeakReference);
+
+//                SoftReference mSoftReference = new SoftReference(mLocationDTO);
+//                locationCache.put(id, mSoftReference);
+
+                locationCache.put(id, mLocationDTO);
 
             }
 
@@ -143,7 +179,6 @@ public class Main {
             //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-
 
 
             //finally block used to close resources
@@ -163,6 +198,8 @@ public class Main {
             System.out.println("Used Memory:"
                     + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
             System.out.println(locationCache.size());
+            // System.out.println(locationCache.get(40527).get().getMd_code());
+            System.out.println(locationCache.get(40527).getCity());
             //System.out.println(SizeOf.deepSizeOf());
 
         }
