@@ -66,6 +66,7 @@ public class Main {
         }
 
         THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
+        //      Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
 
         Statement statement = null;
         try {
