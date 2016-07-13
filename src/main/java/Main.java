@@ -45,9 +45,13 @@ public class Main {
     static String modification_ts = null;
 
 
-    static int t1 = 400000;
-    static int t2 = 600000;
-    static int t3 = 800000;
+    static int t1 = 300000;
+    static int t2 = 400000;
+    static int t3 = 500000;
+    static int t4 = 600000;
+    static int t5 = 700000;
+    static int t6 = 800000;
+    static int t7 = 900000;
 
 
     public static void main(String[] args) {
@@ -61,11 +65,18 @@ public class Main {
     private static void fileSolution() throws IOException {
         Scanner s = new Scanner(new File("/Users/yzhao/Desktop/location.csv"));
 
+        Runtime runtime = Runtime.getRuntime();
+        Map<Integer, SoftReference<LocationDTO>> locationCache = new HashMap<Integer, SoftReference<LocationDTO>>();
+
         int count = 0;
         int countForNullForT1 = 0;
         int countForNullForT2 = 0;
         int countForNullForT3 = 0;
         int countForNullForT4 = 0;
+        int countForNullForT5 = 0;
+        int countForNullForT6 = 0;
+        int countForNullForT7 = 0;
+        int countForNullForT8 = 0;
         while (s.hasNextLine()) {
             String line = s.nextLine();
             String[] splitArray = line.split("\t");
@@ -179,64 +190,27 @@ public class Main {
             if (splitArray[19].equals("NULL") == false)
                 mLocationDTO.setModification_ts(modification_ts);
 
-            Runtime runtime = Runtime.getRuntime();
-            Map<Integer, SoftReference<LocationDTO>> locationCache = new HashMap<Integer, SoftReference<LocationDTO>>();
 
             SoftReference mSoftReference = new SoftReference(mLocationDTO);
             locationCache.put(id, mSoftReference);
             count++;
 
             if (count == t1) {
-                System.out.println();
-                for (SoftReference w : locationCache.values()) {
-                    if (w.get() == null) {
-                        countForNullForT1++;
-                    }
-                }
-                System.out.println("Map Null count before gc:" + countForNullForT1);
-                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
-
-                System.out.println("Total Used Heap Memory:"
-                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
-                System.out.println(locationCache.size());
+                nullValueCount(countForNullForT1, locationCache, runtime);
             } else if (count == t2) {
-                System.out.println();
-                for (SoftReference w : locationCache.values()) {
-                    if (w.get() == null) {
-                        countForNullForT2++;
-                    }
-                }
-                System.out.println("Map Null count before gc:" + countForNullForT2);
-                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
-                System.out.println("Total Used Heap Memory:"
-                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
-                System.out.println(locationCache.size());
+                nullValueCount(countForNullForT2, locationCache, runtime);
             } else if (count == t3) {
-                System.out.println();
-                for (SoftReference w : locationCache.values()) {
-                    if (w.get() == null) {
-                        countForNullForT3++;
-                    }
-                }
-                System.out.println("Map Null count before gc:" + countForNullForT3);
-                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
-
-                System.out.println("Total Used Heap Memory:"
-                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
-                System.out.println(locationCache.size());
+                nullValueCount(countForNullForT3, locationCache, runtime);
+            } else if (count == t4) {
+                nullValueCount(countForNullForT4, locationCache, runtime);
+            } else if (count == t5) {
+                nullValueCount(countForNullForT5, locationCache, runtime);
+            } else if (count == t6) {
+                nullValueCount(countForNullForT6, locationCache, runtime);
+            } else if (count == t7) {
+                nullValueCount(countForNullForT7, locationCache, runtime);
             } else if (count == 970393) {
-                System.out.println();
-                for (SoftReference w : locationCache.values()) {
-                    if (w.get() == null) {
-                        countForNullForT4++;
-                    }
-                }
-                System.out.println("Map Null count before gc:" + countForNullForT4);
-                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
-
-                System.out.println("Total Used Heap Memory:"
-                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
-                System.out.println(locationCache.size());
+                nullValueCount(countForNullForT8, locationCache, runtime);
 
                 SoftReference<LocationDTO> result1 = locationCache.get(40526);
                 SoftReference<LocationDTO> result2 = locationCache.get(40527);
@@ -246,6 +220,21 @@ public class Main {
         }
 
 
+    }
+
+    private static void nullValueCount(int countForNull, Map<Integer, SoftReference<LocationDTO>> locationCache, Runtime runtime) {
+        System.out.println();
+        for (SoftReference w : locationCache.values()) {
+            if (w.get() == null) {
+                countForNull++;
+            }
+        }
+        System.out.println("Map Null count before gc:" + countForNull);
+        System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+        System.out.println("Total Used Heap Memory:"
+                + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+        System.out.println(locationCache.size());
     }
 
     private static void jdbcSolution() {
