@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**
  * Created by yzhao on 7/11/16.
  */
@@ -44,7 +46,7 @@ public class LocationDTO {
     private String ethnicity;
     private double rent_owned;
     private String education;
-    private String modification_ts;
+    private Date modification_ts;
 
 /*
     public byte[] getState() {
@@ -361,11 +363,11 @@ public class LocationDTO {
         this.education = education;
     }
 
-    public String getModification_ts() {
+    public Date getModification_ts() {
         return modification_ts;
     }
 
-    public void setModification_ts(String modification_ts) {
+    public void setModification_ts(Date modification_ts) {
         this.modification_ts = modification_ts;
     }
 }

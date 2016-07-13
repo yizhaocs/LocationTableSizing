@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
 
 /**
  * Created by yzhao on 7/11/16.
@@ -192,8 +193,17 @@ public class Main {
                 mLocationDTO.setRent_owned(rent_owned);
             if (splitArray[18].equals("NULL") == false)
                 mLocationDTO.setEducation(education);
-            if (splitArray[19].equals("NULL") == false)
-                mLocationDTO.setModification_ts(modification_ts);
+            if (splitArray[19].equals("NULL") == false) {
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+                Date date = null;
+                try {
+                    date = format.parse(modification_ts);
+                }catch (Exception e){
+
+                }
+                mLocationDTO.setModification_ts(date);
+
+            }
 
 
             SoftReference mSoftReference = new SoftReference(mLocationDTO);
@@ -490,7 +500,17 @@ public class Main {
                 mLocationDTO.setEthnicity(ethnicity);
                 mLocationDTO.setRent_owned(rent_owned);
                 mLocationDTO.setEducation(education);
-                mLocationDTO.setModification_ts(modification_ts);
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+                Date date = null;
+                try {
+                    date = format.parse(modification_ts);
+
+                }catch (Exception e){
+
+
+
+                    System.out.print(date.toString());                }
+                mLocationDTO.setModification_ts(date);
 
 //
 //                WeakReference mWeakReference = new WeakReference(mLocationDTO);
