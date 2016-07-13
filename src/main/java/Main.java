@@ -1,10 +1,13 @@
 import com.carrotsearch.sizeof.RamUsageEstimator;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by yzhao on 7/11/16.
@@ -20,14 +23,245 @@ public class Main {
     static final String PASS = "N3wQA3ra.";
     static final int mb = 1024 * 1024;
 
-    public static void main(String[] args) {
+    static int id = 0;
+    static String country = null;
+    static String state = null;
+    static String city = null;
+    static String zipcode = null;
+    static double latitude = 0;
+    static double longitude = 0;
+    static int metrocode = 0;
+    static int areacode = 0;
+    static int gmt_offset = 0;
+    static int cbsa_code = 0;
+    static int csa_code = 0;
+    static int md_code = 0;
+    static String md_title = null;
+    static int income = 0;
+    static int political_affiliation = 0;
+    static String ethnicity = null;
+    static double rent_owned = 0;
+    static String education = null;
+    static String modification_ts = null;
 
+
+    static int t1 = 400000;
+    static int t2 = 600000;
+    static int t3 = 800000;
+
+
+    public static void main(String[] args) {
+        try {
+            fileSolution();
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+        }
+    }
+
+    private static void fileSolution() throws IOException {
+        Scanner s = new Scanner(new File("/Users/yzhao/Desktop/location.csv"));
+
+        int count = 0;
+        int countForNullForT1 = 0;
+        int countForNullForT2 = 0;
+        int countForNullForT3 = 0;
+        int countForNullForT4 = 0;
+        while (s.hasNextLine()) {
+            String line = s.nextLine();
+            String[] splitArray = line.split("\t");
+            // System.out.println(line);
+//            System.out.println(Arrays.toString(splitArray));
+//            System.out.println(splitArray.length);
+            cleanup();
+            //Retrieve by column name
+
+            if (splitArray[0] != null && splitArray[0].equals("NULL") == false)
+                id = Integer.valueOf(splitArray[0]);
+
+            if (splitArray[1] != null && splitArray[1].equals("NULL") == false)
+                country = splitArray[1];
+
+            if (splitArray[2] != null && splitArray[2].equals("NULL") == false)
+                state = splitArray[2];
+
+            if (splitArray[3] != null && splitArray[3].equals("NULL") == false)
+                city = splitArray[3];
+
+            if (splitArray[4] != null && splitArray[4].equals("NULL") == false)
+                zipcode = splitArray[4];
+
+            if (splitArray[5] != null && splitArray[5].equals("NULL") == false)
+                latitude = Double.valueOf(splitArray[5]);
+
+            if (splitArray[6] != null && splitArray[6].equals("NULL") == false)
+                longitude = Double.valueOf(splitArray[6]);
+
+            if (splitArray[7] != null && splitArray[7].equals("NULL") == false)
+                metrocode = Integer.valueOf(splitArray[7]);
+
+            if (splitArray[8] != null && splitArray[8].equals("NULL") == false)
+                areacode = Integer.valueOf(splitArray[8]);
+
+            if (splitArray[9] != null && splitArray[9].equals("NULL") == false)
+                gmt_offset = Integer.valueOf(splitArray[9]);
+
+            if (splitArray[10] != null && splitArray[10].equals("NULL") == false)
+                cbsa_code = Integer.valueOf(splitArray[10]);
+
+            if (splitArray[11] != null && splitArray[11].equals("NULL") == false)
+                csa_code = Integer.valueOf(splitArray[11]);
+
+            if (splitArray[12] != null && splitArray[12].equals("NULL") == false)
+                md_code = Integer.valueOf(splitArray[12]);
+
+            if (splitArray[13] != null && splitArray[13].equals("NULL") == false)
+                md_title = splitArray[13];
+
+            if (splitArray[14] != null && splitArray[14].equals("NULL") == false)
+                income = Integer.valueOf(splitArray[14]);
+
+            if (splitArray[15] != null && splitArray[15].equals("NULL") == false)
+                political_affiliation = Integer.valueOf(splitArray[15]);
+
+            if (splitArray[16] != null && splitArray[16].equals("NULL") == false)
+                ethnicity = splitArray[16];
+
+            if (splitArray[17] != null && splitArray[17].equals("NULL") == false)
+                rent_owned = Double.valueOf(splitArray[17]);
+
+            if (splitArray[18] != null && splitArray[18].equals("NULL") == false)
+                education = splitArray[18];
+
+            if (splitArray[19] != null && splitArray[19].equals("NULL") == false)
+                modification_ts = splitArray[19];
+
+
+            LocationDTO mLocationDTO = new LocationDTO();
+
+            if (splitArray[0].equals("NULL") == false)
+                mLocationDTO.setId(id);
+            if (splitArray[1].equals("NULL") == false)
+                mLocationDTO.setCountry(country);
+            if (splitArray[2].equals("NULL") == false)
+                mLocationDTO.setState(state);
+            if (splitArray[3].equals("NULL") == false)
+                mLocationDTO.setCity(city);
+            if (splitArray[4].equals("NULL") == false)
+                mLocationDTO.setZipcode(zipcode);
+            if (splitArray[5].equals("NULL") == false)
+                mLocationDTO.setLatitude(latitude);
+            if (splitArray[6].equals("NULL") == false)
+                mLocationDTO.setLongitude(longitude);
+            if (splitArray[7].equals("NULL") == false)
+                mLocationDTO.setMetrocode(metrocode);
+            if (splitArray[8].equals("NULL") == false)
+                mLocationDTO.setAreacode(areacode);
+            if (splitArray[9].equals("NULL") == false)
+                mLocationDTO.setGmt_offset(gmt_offset);
+            if (splitArray[10].equals("NULL") == false)
+                mLocationDTO.setCbsa_code(cbsa_code);
+            if (splitArray[11].equals("NULL") == false)
+                mLocationDTO.setCsa_code(csa_code);
+            if (splitArray[12].equals("NULL") == false)
+                mLocationDTO.setMd_code(md_code);
+            if (splitArray[13].equals("NULL") == false)
+                mLocationDTO.setMd_title(md_title);
+            if (splitArray[14].equals("NULL") == false)
+                mLocationDTO.setIncome(income);
+            if (splitArray[15].equals("NULL") == false)
+                mLocationDTO.setPolitical_affiliation(political_affiliation);
+            if (splitArray[16].equals("NULL") == false)
+                mLocationDTO.setEthnicity(ethnicity);
+            if (splitArray[17].equals("NULL") == false)
+                mLocationDTO.setRent_owned(rent_owned);
+            if (splitArray[18].equals("NULL") == false)
+                mLocationDTO.setEducation(education);
+            if (splitArray[19].equals("NULL") == false)
+                mLocationDTO.setModification_ts(modification_ts);
+
+            Runtime runtime = Runtime.getRuntime();
+            Map<Integer, SoftReference<LocationDTO>> locationCache = new HashMap<Integer, SoftReference<LocationDTO>>();
+
+            SoftReference mSoftReference = new SoftReference(mLocationDTO);
+            locationCache.put(id, mSoftReference);
+            count++;
+
+            if (count == t1) {
+                System.out.println();
+                for (SoftReference w : locationCache.values()) {
+                    if (w.get() == null) {
+                        countForNullForT1++;
+                    }
+                }
+                System.out.println("Map Null count before gc:" + countForNullForT1);
+                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+                System.out.println("Total Used Heap Memory:"
+                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                System.out.println(locationCache.size());
+            } else if (count == t2) {
+                System.out.println();
+                for (SoftReference w : locationCache.values()) {
+                    if (w.get() == null) {
+                        countForNullForT2++;
+                    }
+                }
+                System.out.println("Map Null count before gc:" + countForNullForT2);
+                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+                System.out.println("Total Used Heap Memory:"
+                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                System.out.println(locationCache.size());
+            } else if (count == t3) {
+                System.out.println();
+                for (SoftReference w : locationCache.values()) {
+                    if (w.get() == null) {
+                        countForNullForT3++;
+                    }
+                }
+                System.out.println("Map Null count before gc:" + countForNullForT3);
+                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+                System.out.println("Total Used Heap Memory:"
+                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                System.out.println(locationCache.size());
+            } else if (count == 970393) {
+                System.out.println();
+                for (SoftReference w : locationCache.values()) {
+                    if (w.get() == null) {
+                        countForNullForT4++;
+                    }
+                }
+                System.out.println("Map Null count before gc:" + countForNullForT4);
+                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+                System.out.println("Total Used Heap Memory:"
+                        + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                System.out.println(locationCache.size());
+
+                SoftReference<LocationDTO> result1 = locationCache.get(40526);
+                SoftReference<LocationDTO> result2 = locationCache.get(40527);
+                System.out.println(result1.get().getCity());
+                System.out.println(result2.get().getCity());
+            }
+        }
+
+
+    }
+
+    private static void jdbcSolution() {
 
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            long lStartTime = System.currentTimeMillis();
             getLocation(connection);
+            long lEndTime = System.currentTimeMillis();
+
+            long difference = lEndTime - lStartTime;
+
+            System.out.println("Elapsed time:" + difference + "ms");
 
             //Print used memory
 
@@ -69,8 +303,8 @@ public class Main {
 
         // THashMap<Integer, LocationDTO> locationCache = new THashMap<Integer, LocationDTO>();
         // THashMap<Integer, WeakReference<LocationDTO>> locationCache = new THashMap<Integer, WeakReference<LocationDTO>>();
-       // TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
-      //  TIntObjectHashMap<WeakReference<LocationDTO>> locationCache = new TIntObjectHashMap<WeakReference<LocationDTO>>();
+        // TIntObjectHashMap<LocationDTO> locationCache = new TIntObjectHashMap<LocationDTO>();
+        //  TIntObjectHashMap<WeakReference<LocationDTO>> locationCache = new TIntObjectHashMap<WeakReference<LocationDTO>>();
         //  TIntObjectHashMap<SoftReference<LocationDTO>> locationCache = new TIntObjectHashMap<SoftReference<LocationDTO>>();
         //Map<Integer, LocationDTO> locationCache = new HashMap<Integer, LocationDTO>();
 //        Map<Integer, WeakReference<LocationDTO>> locationCache = new HashMap<Integer, WeakReference<LocationDTO>>();
@@ -83,31 +317,39 @@ public class Main {
             statement = connection.createStatement();
             String sql = "SELECT * FROM location";
             ResultSet result = statement.executeQuery(sql);
+//            System.out.println("JDBC Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOf(result)));
 
+            int count = 0;
+            int countForNullForT1 = 0;
+            int countForNullForT2 = 0;
+            int countForNullForT3 = 0;
+            int countForNullForT4 = 0;
             //STEP 5: Extract data from result set
             while (result.next()) {
-                //Retrieve by column name
-                int id = result.getInt("id");
-                String country = result.getString("country");
-                String state = result.getString("state");
-                String city = result.getString("city");
-                String zipcode = result.getString("zipcode");
-                double latitude = result.getDouble("latitude");
-                double longitude = result.getDouble("longitude");
-                int metrocode = result.getInt("metrocode");
-                int areacode = result.getInt("areacode");
-                int gmt_offset = result.getInt("gmt_offset");
-                int cbsa_code = result.getInt("cbsa_code");
-                int csa_code = result.getInt("csa_code");
-                int md_code = result.getInt("md_code");
-                String md_title = result.getString("md_title");
-                int income = result.getInt("income");
-                int political_affiliation = result.getInt("political_affiliation");
-                String ethnicity = result.getString("ethnicity");
-                double rent_owned = result.getDouble("rent_owned");
-                String education = result.getString("education");
-                Date modification_ts = result.getDate("modification_ts");
 
+                cleanup();
+                //Retrieve by column name
+                id = result.getInt("id");
+                country = result.getString("country");
+                state = result.getString("state");
+                city = result.getString("city");
+                zipcode = result.getString("zipcode");
+                latitude = result.getDouble("latitude");
+                longitude = result.getDouble("longitude");
+                metrocode = result.getInt("metrocode");
+                areacode = result.getInt("areacode");
+                gmt_offset = result.getInt("gmt_offset");
+                cbsa_code = result.getInt("cbsa_code");
+                csa_code = result.getInt("csa_code");
+                md_code = result.getInt("md_code");
+                md_title = result.getString("md_title");
+                income = result.getInt("income");
+                political_affiliation = result.getInt("political_affiliation");
+                ethnicity = result.getString("ethnicity");
+                rent_owned = result.getDouble("rent_owned");
+                education = result.getString("education");
+                //modification_ts = result.getDate("modification_ts");
+                modification_ts = result.getString("modification_ts");
 
 
                /*
@@ -169,10 +411,71 @@ public class Main {
 //                WeakReference mWeakReference = new WeakReference(mLocationDTO);
 //                locationCache.put(id, mWeakReference);
 
+
                 SoftReference mSoftReference = new SoftReference(mLocationDTO);
                 locationCache.put(id, mSoftReference);
+                count++;
 
-             // locationCache.put(id, mLocationDTO);
+                if (count == t1) {
+                    System.out.println();
+                    for (SoftReference w : locationCache.values()) {
+                        if (w.get() == null) {
+                            countForNullForT1++;
+                        }
+                    }
+                    System.out.println("Map Null count before gc:" + countForNullForT1);
+                    System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+                    System.out.println("Total Used Heap Memory:"
+                            + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                    System.out.println(locationCache.size());
+                } else if (count == t2) {
+                    System.out.println();
+                    for (SoftReference w : locationCache.values()) {
+                        if (w.get() == null) {
+                            countForNullForT2++;
+                        }
+                    }
+                    System.out.println("Map Null count before gc:" + countForNullForT2);
+                    System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+                    System.out.println("Total Used Heap Memory:"
+                            + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                    System.out.println(locationCache.size());
+                } else if (count == t3) {
+                    System.out.println();
+                    for (SoftReference w : locationCache.values()) {
+                        if (w.get() == null) {
+                            countForNullForT3++;
+                        }
+                    }
+                    System.out.println("Map Null count before gc:" + countForNullForT3);
+                    System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+                    System.out.println("Total Used Heap Memory:"
+                            + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                    System.out.println(locationCache.size());
+                } else if (count == 970393) {
+                    System.out.println();
+                    for (SoftReference w : locationCache.values()) {
+                        if (w.get() == null) {
+                            countForNullForT4++;
+                        }
+                    }
+                    System.out.println("Map Null count before gc:" + countForNullForT4);
+                    System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+                    System.out.println("Total Used Heap Memory:"
+                            + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
+                    System.out.println(locationCache.size());
+
+                    SoftReference<LocationDTO> result1 = locationCache.get(40526);
+                    SoftReference<LocationDTO> result2 = locationCache.get(40527);
+                    System.out.println(result1.get().getCity());
+                    System.out.println(result2.get().getCity());
+                }
+
+
+                // locationCache.put(id, mLocationDTO);
 
             }
 
@@ -203,7 +506,6 @@ public class Main {
                 se.printStackTrace();
             }
 
-            int count = 0;
 
 //            for (TIntObjectIterator it = locationCache.iterator(); it.hasNext(); ) {
 //                it.advance();
@@ -212,11 +514,6 @@ public class Main {
 //                }
 //            }
 
-            for(SoftReference w:locationCache.values()){
-                if(w.get() == null){
-                    count++;
-                }
-            }
 
 //            for(WeakReference w:locationCache.values()){
 //                if(w.get() == null){
@@ -224,12 +521,8 @@ public class Main {
 //                }
 //            }
 
-            //System.out.println("count before gc:" + count);
-            System.out.println("Size before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
-            count = 0;
 
-
-            System.gc();
+//            System.gc();
 
 //            for (TIntObjectIterator it = locationCache.iterator(); it.hasNext(); ) {
 //                it.advance();
@@ -245,27 +538,49 @@ public class Main {
 //            }
 
 
-
-            for(SoftReference w:locationCache.values()){
-                if(w.get() == null){
-                    count++;
-                }
-            }
-            System.out.println("Size after gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+//
+//            for(SoftReference w:locationCache.values()){
+//                if(w.get() == null){
+//                    count++;
+//                }
+//            }
+//            System.out.println("Size after gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
             // System.out.println("count after gc:" + count);
-            System.out.println("Used Memory:"
-                    + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
-            System.out.println(locationCache.size());
+
 //            WeakReference<LocationDTO> result = locationCache.get(40527);
-            SoftReference<LocationDTO> result = locationCache.get(40527);
+
 //             System.out.println(result.get());
-           // System.out.println(locationCache.get(40527).get().getCity());
+            // System.out.println(locationCache.get(40527).get().getCity());
             //System.out.println(SizeOf.deepSizeOf());
 
         }
     }
 
-    public static String byteArrayToString(byte[] byteArray) {
+    private static void cleanup() {
+        id = 0;
+        country = null;
+        state = null;
+        city = null;
+        zipcode = null;
+        latitude = 0;
+        longitude = 0;
+        metrocode = 0;
+        areacode = 0;
+        gmt_offset = 0;
+        cbsa_code = 0;
+        csa_code = 0;
+        md_code = 0;
+        md_title = null;
+        income = 0;
+        political_affiliation = 0;
+        ethnicity = null;
+        rent_owned = 0;
+        education = null;
+        modification_ts = null;
+
+    }
+
+    private static String byteArrayToString(byte[] byteArray) {
         StringBuilder sb = new StringBuilder();
         try {
             sb.append(new String(byteArray, "UTF-8"));
