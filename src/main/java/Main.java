@@ -1,3 +1,5 @@
+import com.carrotsearch.sizeof.RamUsageEstimator;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.sql.*;
@@ -167,8 +169,8 @@ public class Main {
 //                WeakReference mWeakReference = new WeakReference(mLocationDTO);
 //                locationCache.put(id, mWeakReference);
 
-   //             SoftReference mSoftReference = new SoftReference(mLocationDTO);
-  //              locationCache.put(id, mSoftReference);
+                SoftReference mSoftReference = new SoftReference(mLocationDTO);
+                locationCache.put(id, mSoftReference);
 
              // locationCache.put(id, mLocationDTO);
 
@@ -222,7 +224,8 @@ public class Main {
 //                }
 //            }
 
-            System.out.println("count before gc:" + count);
+            //System.out.println("count before gc:" + count);
+            System.out.println("Size before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
             count = 0;
 
 
@@ -241,18 +244,22 @@ public class Main {
 //                }
 //            }
 
+
+
             for(SoftReference w:locationCache.values()){
                 if(w.get() == null){
                     count++;
                 }
             }
-            System.out.println("count after gc:" + count);
+            System.out.println("Size after gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+            // System.out.println("count after gc:" + count);
             System.out.println("Used Memory:"
                     + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
             System.out.println(locationCache.size());
 //            WeakReference<LocationDTO> result = locationCache.get(40527);
+            SoftReference<LocationDTO> result = locationCache.get(40527);
 //             System.out.println(result.get());
-            //System.out.println(locationCache.get(40527).getCity());
+           // System.out.println(locationCache.get(40527).get().getCity());
             //System.out.println(SizeOf.deepSizeOf());
 
         }
