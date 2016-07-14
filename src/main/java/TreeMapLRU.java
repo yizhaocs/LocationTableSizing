@@ -8,19 +8,32 @@ import java.util.TreeMap;
  */
 public class TreeMapLRU {
     public static void main(String[] args){
+        System.out.println(dateToInteger("2016-07-01 01:48:39"));
 
     }
 
 
-//    private static Integer dateToInteger(Date date){
-//
-//    }
+    private static Long dateToInteger(String date){
+        String[] splitDate = date.split(" ");
+        String[] splitFirstHalf = splitDate[0].split("-");
+        String[] splitSecondHalf = splitDate[1].split(":");
 
-    private class FBHistoryTreeMapComparator implements Comparator<Integer> {
+        StringBuilder result = new StringBuilder();
+        for(String s: splitFirstHalf){
+            result.append(s);
+        }
+
+        for(String s: splitSecondHalf){
+            result.append(s);
+        }
+        return Long.valueOf(result.toString());
+    }
+
+    private class timeStampComparator implements Comparator<Long> {
 
         Map<Integer, LocationDTO> map;
 
-        public FBHistoryTreeMapComparator(Map<Integer, LocationDTO> base) {
+        public timeStampComparator(Map<Integer, LocationDTO> base) {
             this.map = base;
         }
 
@@ -28,10 +41,9 @@ public class TreeMapLRU {
          * in null case, we want it to throw an exception
          * we don't want it to fail silently
          */
-        public int compare(Integer a, Integer b) {
-            //Integer oldTimeStamp = (int) (map.get(a).getModification_ts()/1000);
-//            return oldTimeStamp.compareTo(b);
-            return 0;
+        public int compare(Long a, Long b) {
+            Long oldTimeStamp = dateToInteger(map.get(a).toString());
+            return oldTimeStamp.compareTo(b);
         }
     }
 
@@ -41,10 +53,10 @@ public class TreeMapLRU {
      * we will use this with our FB history map
      *
      */
-    private class LimitSizeTreeMap extends TreeMap<Integer, LocationDTO> {
+    private class TimeTreeMap extends TreeMap<Integer, LocationDTO> {
         private Date newTimeStamp;
 
-        public LimitSizeTreeMap(Comparator<Integer> comparator, Date newTimeStamp) {
+        public TimeTreeMap(Comparator<Integer> comparator, Date newTimeStamp) {
             super(comparator);
 
             this.newTimeStamp = newTimeStamp;
