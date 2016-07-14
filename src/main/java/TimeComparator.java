@@ -11,6 +11,7 @@ public class TimeComparator implements Comparator<Integer> {
     public TimeComparator(Map<Integer, LocationDTO> map){
         this.map.putAll(map);
     }
+
     public int compare(Integer a, Integer b) {
         return map.get(a).getModification_ts().compareTo(map.get(b).getModification_ts());
     }

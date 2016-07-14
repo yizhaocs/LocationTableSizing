@@ -219,7 +219,9 @@ public class Main {
                     }
                 }
                 System.out.println("Map Null count before gc:" + countForNullForT1);
-                //System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOfAll(locationCache)));
+
+
+                System.out.println("Map Used Heap Memory before gc:" + RamUsageEstimator.humanReadableUnits(RamUsageEstimator.sizeOf(locationCache)));
 
                 System.out.println("Total Used Heap Memory:"
                         + (runtime.totalMemory() - runtime.freeMemory()) / mb + "mb");
