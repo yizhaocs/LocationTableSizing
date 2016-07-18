@@ -33,8 +33,8 @@ public class TreeMapTestingMain {
 
 
         // configure sorted map
-        Comparator mTimeComparator = new TimeStampComparator(unsortedMap);
-        SortByValueTreeMap<Integer, LocationDTO> sortedMap = new SortByValueTreeMap<Integer, LocationDTO>(mTimeComparator);
+        Comparator mTimeComparator = new SortByTimeStampComparator(unsortedMap);
+        SortByTimeStampTreeMap<Integer, LocationDTO> sortedMap = new SortByTimeStampTreeMap<Integer, LocationDTO>(mTimeComparator);
 
         sortedMap.put(2, a);
         sortedMap.put(1, b);
