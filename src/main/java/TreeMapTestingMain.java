@@ -11,7 +11,7 @@ import java.util.TreeMap;
 public class TreeMapTestingMain {
     public static void main(String[] args) {
 
-
+        // initialize data
         Map<Integer, LocationDTO> unsortedMap = new TreeMap<Integer, LocationDTO>();
 
         LocationDTO a = new LocationDTO();
@@ -35,7 +35,9 @@ public class TreeMapTestingMain {
         // configure sorted map
         Comparator mTimeComparator = new TimeStampComparator(unsortedMap);
         SortByValueTreeMap<Integer, LocationDTO> sortedMap = new SortByValueTreeMap<Integer, LocationDTO>(mTimeComparator);
-        sortedMap.putAll(unsortedMap);
+
+        sortedMap.put(2, a);
+        sortedMap.put(1, b);
 
 
         // printout
